@@ -53,7 +53,7 @@ public class Arena {
         this.arenaConfig = plugin.getArenaConfig();
         this.arenaSidebar = new ArenaSidebar(plugin, this);
 
-        //REGISTRO DE JOGOS/
+        //REGISTRO DE JOGOS
         if(getGame(id).equals(Games.ARENA)){
             gameArena = new GameArena(this);
         }
