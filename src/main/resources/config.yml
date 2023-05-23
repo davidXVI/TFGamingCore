@@ -1,0 +1,12 @@
+countdown-seconds: 25
+arenas:
+  '0':
+    game-type: 'arna'
+    required-players: 2
+    max-players: 8
+    world: 'Tribal'
+    x: 2
+    y: 100
+    z: 0
+    pitch: 0
+    yaw: 0
