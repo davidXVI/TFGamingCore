@@ -21,6 +21,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Arena {
 
@@ -131,7 +132,9 @@ public class Arena {
     //REMOVER JOGADOR
     public void removePlayer(Player player){
 
-        if(player.isOnline()){serverCore.getLobby().addPlayer(player);}
+        if(player.isOnline()){
+            serverCore.getLobby().addPlayer(player);
+        }
         players.remove(player);
         removeTeam(player);
         removeSpectator(player);
@@ -294,9 +297,5 @@ public class Arena {
     public Location getWaitingSpawn(){
         return waitingSpawn;
     }
-
-
-
-
 
 }

@@ -48,9 +48,9 @@ public class ArenaCommand extends Command {
                     case "parar":
                         if (ArenaManager.isPlaying(player)) {
                             if (Objects.requireNonNull(ArenaManager.getArena(player)).getState().equals(GameState.JOGANDO)) {
-                                Objects.requireNonNull(ArenaManager.getArena(player)).reset();
                                 Component stopGame = mm.deserialize("<gold>[⚡] <gray>Um administrador cancelou a partida que você estava jogando!\nEnviando você para o lobby...");
                                 Objects.requireNonNull(ArenaManager.getArena(player)).sendMessage(stopGame);
+                                Objects.requireNonNull(ArenaManager.getArena(player)).reset();
 
                             } else {
                                 messageUtil.sendErrorMessage(player, ErrorMessages.NEEDS_PLAYING);

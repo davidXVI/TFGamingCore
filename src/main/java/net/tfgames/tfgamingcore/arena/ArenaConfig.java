@@ -21,7 +21,7 @@ public class ArenaConfig {
     public int getRequiredPlayers(int id){
         return config.getInt("arenas." + id + ".required-players");
     }
-    public int getMaxPlayers(int id){
+    public static int getMaxPlayers(int id){
         return config.getInt("arenas." + id + ".max-players");
     }
     public int getCountdownSeconds(int id){

@@ -4,6 +4,7 @@ import net.tfgames.tfarenagame.TFArenaGame;
 import net.tfgames.tfgamingcore.arena.ArenaConfig;
 import net.tfgames.tfgamingcore.arena.ArenaManager;
 import net.tfgames.tfgamingcore.arena.PreGameListener;
+import net.tfgames.tfgamingcore.arena.QueueManager;
 import net.tfgames.tfgamingcore.command.commands.ArenaCommand;
 import net.tfgames.tfgamingcore.command.commands.EntrarCommand;
 import net.tfgames.tfgamingcore.command.commands.LobbyCommand;
@@ -23,6 +24,7 @@ public final class TFGamingCore extends JavaPlugin {
     private ArenaConfig arenaConfig;
     private ArenaManager arenaManager;
     private MessageUtil messageUtil;
+    private static QueueManager queueManager;
     private GameMap map;
     private final File gameMapsFolder = new File(getDataFolder(), "gameMaps");
 
@@ -33,6 +35,7 @@ public final class TFGamingCore extends JavaPlugin {
         arenaConfig.setupConfig(this);
         arenaManager = new ArenaManager(this);
         messageUtil = new MessageUtil();
+        queueManager = new QueueManager();
 
         //WORLD RESET MANAGER
         if(!gameMapsFolder.exists()){
@@ -63,5 +66,8 @@ public final class TFGamingCore extends JavaPlugin {
     public File getGameMapsFolder(){return gameMapsFolder; }
     public ArenaManager getArenaManager(){ return arenaManager; }
     public MessageUtil getMessageUtil() {return messageUtil;}
+    public static QueueManager getQueueManager() {return queueManager;}
+
     public static TFGamingCore getInstance() {return instance;}
+
 }

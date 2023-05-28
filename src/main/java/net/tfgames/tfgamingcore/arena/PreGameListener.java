@@ -8,6 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PreGameListener implements Listener {
 
@@ -50,6 +51,20 @@ public class PreGameListener implements Listener {
                 if (ArenaManager.isPreGame(arena.getID())) {
                     e.setCancelled(true);
                 }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onLeave(PlayerQuitEvent e){
+        Player player = e.getPlayer();
+        Arena arena = ArenaManager.getArena(player);
+        if(arena != null){
+            if (ArenaManager.isPreGame(arena.getID())) {
+                arena.removePlayer(player);
+            }else if (ArenaManager.isPlaying(player)){
+                arena.removePlayer(player);
+
             }
         }
     }

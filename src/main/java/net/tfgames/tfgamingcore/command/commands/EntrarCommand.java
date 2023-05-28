@@ -8,6 +8,7 @@ import net.tfgames.tfgamingcore.games.GameState;
 import net.tfgames.tfgamingcore.util.ErrorMessages;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class EntrarCommand extends Command {
                         if(ArenaManager.isRecruiting(id) || Objects.requireNonNull(ArenaManager.getArena(id)).getState().equals(GameState.INICIANDO) && Objects.requireNonNull(ArenaManager.getArena(id)).getPlayers().size() <= arenaConfig.getMaxPlayers(id)){
                             if(!Objects.requireNonNull(ArenaManager.getArena(id)).getState().equals(GameState.JOGANDO)){
                                 Objects.requireNonNull(ArenaManager.getArena(id)).addPlayer(player);
-                                player.sendRichMessage("<green>[✔] <gray>Arena encontrada! Enviando você para a arena.");
+                                player.sendMessage("<green>[✔] <gray>Arena encontrada! Enviando você para a arena.");
                             }else{
                                 messageUtil.sendErrorMessage(player, ErrorMessages.ARENA_UNAVAILABLE);
                             }

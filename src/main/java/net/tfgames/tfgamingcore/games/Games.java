@@ -10,7 +10,9 @@ public enum Games {
     NEXUSWARS("Nexus Wars", "nxwr", NamedTextColor.LIGHT_PURPLE, 500, 100, 4, true, false, false, true),
     ESCADONA("Escadona", "escd", NamedTextColor.GOLD, 350, 80, 8, true, false, false, true),
     ESCONDEESCONDE( "Esconde-Esconde", "escn", NamedTextColor.YELLOW, 350, 80, 2, true, false, false, false),
-    ARENA("Arena", "arna", NamedTextColor.YELLOW, 500, 100, 0, false, false, false, false);
+    ARENA("Arena", "arna", NamedTextColor.YELLOW, 500, 100, 0, false, false, false, false),
+    UHC("UHC", "uhc", NamedTextColor.YELLOW, 1000, 200, 0, false, false, false, true);
+
 
     private final String display;
     private final String key;
