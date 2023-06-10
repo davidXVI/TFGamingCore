@@ -17,6 +17,11 @@ public class QueueManager {
                 player.sendRichMessage("<gold>[⚡] <gray>Procurando uma arena de <gold>" + game.getDisplay());
                 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 2f, 2f);
             }
+            if(game.isRestricted()){
+                player.sendRichMessage("<red>[❌] <gray>O minigame <gold>" + game.getDisplay() + "<gray> está desativado por enquanto!");
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+                break;
+            }
             if(arena.getState() == GameState.RECRUTANDO || arena.getState() == GameState.PERSISTENTE || arena.getState() == GameState.INICIANDO && arena.getGame(arena.getID()).equals(game)){
                 if(arena.getPlayers().size() < ArenaConfig.getMaxPlayers(arena.getID())){
                     if(!arena.getState().equals(GameState.JOGANDO) && arena.getGame(arena.getID()).equals(game)){
@@ -33,7 +38,6 @@ public class QueueManager {
                         "<gold>[⚡] <gray>Se você acredita que isso seja um erro, contate um staff com o erro: <gold>2");
                 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
                 break;
-
             }
         }
     }

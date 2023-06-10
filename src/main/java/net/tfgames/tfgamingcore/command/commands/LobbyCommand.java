@@ -4,9 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.tfgames.tfgamingcore.TFGamingCore;
+import net.tfgames.tfgamingcore.arena.Arena;
 import net.tfgames.tfgamingcore.arena.ArenaManager;
 import net.tfgames.tfgamingcore.command.Command;
 import net.tfgames.tfgamingcore.util.ErrorMessages;
+import net.tfgames.tfservercore.TFServerCore;
+import net.tfgames.tfservercore.lobby.Lobby;
+import net.tfgames.tfuhcgame.game.GameUHC;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -29,14 +33,10 @@ public class LobbyCommand extends Command {
     public void execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
         if(ArenaManager.isPlaying(player)){
-            if(!Objects.requireNonNull(ArenaManager.getArena(player)).getSpectators().contains(player)){
-                MiniMessage mm = MiniMessage.miniMessage();
-                Component message = mm.deserialize("<gray>[<red>-<gray>] ")
-                        .append(Component.text(player.getName()).color(serverCore.getPlayerManager().getRank(player).getTextColor())
-                                .append(Component.text(" saiu!").color(NamedTextColor.YELLOW)));
-                Objects.requireNonNull(ArenaManager.getArena(player)).sendMessage(message);
-            }
+            Arena arena = ArenaManager.getArena(player);
+            assert arena != null;
             Objects.requireNonNull(ArenaManager.getArena(player)).removePlayer(player);
+            Lobby.addPlayer(player);
         }else{
             messageUtil.sendErrorMessage(player, ErrorMessages.ONLY_ARENA);
         }

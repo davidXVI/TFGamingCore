@@ -6,13 +6,13 @@ import net.md_5.bungee.api.ChatColor;
 
 public enum Games {
 
-    SKYWARS("Sky Wars", "skwr", NamedTextColor.YELLOW, 150, 50, 0, false, true, false, true),
-    NEXUSWARS("Nexus Wars", "nxwr", NamedTextColor.LIGHT_PURPLE, 500, 100, 4, true, false, false, true),
-    ESCADONA("Escadona", "escd", NamedTextColor.GOLD, 350, 80, 8, true, false, false, true),
-    ESCONDEESCONDE( "Esconde-Esconde", "escn", NamedTextColor.YELLOW, 350, 80, 2, true, false, false, false),
-    ARENA("Arena", "arna", NamedTextColor.YELLOW, 500, 100, 0, false, false, false, false),
-    UHC("UHC", "uhc", NamedTextColor.YELLOW, 1000, 200, 0, false, false, false, true);
-
+    SKYWARS("Sky Wars", "skwr", NamedTextColor.YELLOW, 150, 50, 0, false, true, false, true, false),
+    NEXUSWARS("Nexus Wars", "nxwr", NamedTextColor.LIGHT_PURPLE, 500, 100, 4, true, false, false, true, false),
+    ESCADONA("Escadona", "escd", NamedTextColor.GOLD, 350, 80, 8, true, false, false, true, false),
+    ESCONDEESCONDE( "Esconde-Esconde", "escn", NamedTextColor.YELLOW, 350, 80, 2, true, false, false, false, false),
+    ARENA("Arena", "arna", NamedTextColor.YELLOW, 500, 100, 0, false, false, false, false, false),
+    UHC("UHC", "uhc", NamedTextColor.YELLOW, 1000, 200, 0, false, false, false, false, false),
+    SANDBOX("Caixa de Areia", "dev", NamedTextColor.YELLOW, 100, 100, 0, false, false, false, false, false);
 
     private final String display;
     private final String key;
@@ -24,8 +24,9 @@ public enum Games {
     private final boolean isKitGame;
     private final boolean isPersistent;
     private final boolean mapRestore;
+    private boolean isRestricted;
 
-    Games(String display, String key, TextColor color, int winCredits, int playedCredits, int teamCount, boolean isTeamGame, boolean isKitGame, boolean isPersistent, boolean mapRestore){
+    Games(String display, String key, TextColor color, int winCredits, int playedCredits, int teamCount, boolean isTeamGame, boolean isKitGame, boolean isPersistent, boolean mapRestore, boolean isRestricted){
         this.display = display;
         this.key = key;
         this.color = color;
@@ -36,6 +37,7 @@ public enum Games {
         this.isKitGame = isKitGame;
         this.isPersistent = isPersistent;
         this.mapRestore = mapRestore;
+        this.isRestricted = isRestricted;
     }
 
     public String getDisplay(){return display;}
@@ -57,4 +59,9 @@ public enum Games {
     public boolean isPersistent(){return isPersistent;}
 
     public boolean needsMapRestore() {return mapRestore;}
+
+    public boolean isRestricted(){ return isRestricted; }
+
+    public void setRestricted(boolean set){isRestricted = set;}
+
 }

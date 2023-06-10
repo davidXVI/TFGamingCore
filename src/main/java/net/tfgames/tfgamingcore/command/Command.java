@@ -4,6 +4,7 @@ import net.tfgames.tfgamingcore.TFGamingCore;
 import net.tfgames.tfgamingcore.arena.ArenaConfig;
 import net.tfgames.tfgamingcore.util.MessageUtil;
 import net.tfgames.tfservercore.TFServerCore;
+import net.tfgames.tfservercore.api.PlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandMap;
 import org.bukkit.command.CommandSender;

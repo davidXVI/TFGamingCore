@@ -12,7 +12,12 @@ import net.tfgames.tfgamingcore.games.Games;
 import net.tfgames.tfgamingcore.games.Teams;
 import net.tfgames.tfgamingcore.map.GameMap;
 import net.tfgames.tfgamingcore.map.LocalGameMap;
+import net.tfgames.tfgamingcore.util.FileUtil;
+import net.tfgames.tfsandbox.game.GameSandbox;
 import net.tfgames.tfservercore.TFServerCore;
+import net.tfgames.tfservercore.lobby.Lobby;
+import net.tfgames.tfuhcgame.game.GameUHC;
+import net.tfgames.tfuhcgame.game.world.MapLoader;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -22,6 +27,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+
 
 public class Arena {
 
@@ -40,6 +46,8 @@ public class Arena {
     private Countdown countdown;
     private HashMap<Player, Teams> teams;
     private GameArena gameArena;
+    private GameUHC gameUHC;
+    private GameSandbox gameSandbox;
 
     //BOOLEANS
     private boolean canJoin;
@@ -57,6 +65,10 @@ public class Arena {
         //REGISTRO DE JOGOS
         if(getGame(id).equals(Games.ARENA)){
             gameArena = new GameArena(this);
+        }else if(getGame(id).equals(Games.UHC)){
+            gameUHC = new GameUHC(this);
+        }else if(getGame(id).equals(Games.SANDBOX)){
+            gameSandbox = new GameSandbox(this);
         }
 
         //REGISTRO DE MAPA
@@ -97,11 +109,18 @@ public class Arena {
         if(getGame(id).equals(Games.ARENA)){
             gameArena.start();
         }
+        if(getGame(id).equals(Games.UHC)){
+            gameUHC.start();
+        }
+        if(getGame(id).equals(Games.SANDBOX)){
+            gameSandbox.start();
+        }
     }
 
     //ADICIONAR JOGADOR
     public void addPlayer(Player player){
 
+        Lobby.removePlayer(player);
         players.add(player);
 
         //RESETANDO JOGADOR E TELEPORTANDO O JOGADOR
@@ -113,6 +132,7 @@ public class Arena {
         player.setHealth(20);
         player.setFoodLevel(20);
         player.teleport(waitingSpawn);
+
 
         if(getGame(id).isTeamGame()){arenaSidebar.createTeamScoreboard(player);}
         else{arenaSidebar.createSoloScoreboard(player);}
@@ -126,15 +146,24 @@ public class Arena {
         //FASE INICIAR
         if (state.equals(GameState.RECRUTANDO) && players.size() >= arenaConfig.getRequiredPlayers(getID())) {
             countdown.start();
+            if(getGame(id).equals(Games.UHC)){
+                gameUHC.generateArena();
+            }
         }
     }
 
     //REMOVER JOGADOR
     public void removePlayer(Player player){
-
-        if(player.isOnline()){
-            serverCore.getLobby().addPlayer(player);
+        if(Objects.requireNonNull(ArenaManager.getArena(player)).getGame(id).equals(Games.UHC)){
+            GameUHC.alivePlayers.remove(player);
+        }else if(Objects.requireNonNull(ArenaManager.getArena(player)).getGame(id).equals(Games.ARENA)){
+            GameArena.ingamePlayers.remove(player);
+            GameArena.kills.remove(player);
         }
+
+        if(player.isOnline()){Lobby.addPlayer(player);}
+        if(spectators.contains(player)){removeSpectator(player);}
+
         players.remove(player);
         removeTeam(player);
         removeSpectator(player);
@@ -203,14 +232,18 @@ public class Arena {
         }
     }
 
+    public void sendSound(Sound sound){
+        for(Player player : players){
+            player.playSound(player, sound, 1.0F, 1.0F);
+        }
+    }
+
     public void reset() {
         for (Player player : players) {
-            serverCore.getLobby().addPlayer(player);
+            Lobby.addPlayer(player);
             teams.clear();
             spectators.clear();
         }
-
-        if(getGame(id).needsMapRestore()){gameMap.restoreFromSource();}
 
         state = GameState.RECRUTANDO;
         players.clear();
@@ -221,15 +254,18 @@ public class Arena {
         canSpectate = true;
         isPrivate = false;
 
+        if(getGame(id).needsMapRestore()){gameMap.restoreFromSource();}
+        if(getGame(id).equals(Games.UHC)){deleteUHCWorld();}
+
     }
 
     public void softReset(){
         state = GameState.RECRUTANDO;
-        new Countdown(plugin, this);
         waitingSpawn = arenaConfig.getArenaSpawn(id);
         canJoin = true;
         canSpectate = true;
         isPrivate = false;
+        new Countdown(plugin, this);
     }
 
     //GAME MANAGER
@@ -279,6 +315,7 @@ public class Arena {
             player2.hidePlayer(plugin, player);
         }
         player.setAllowFlight(true);
+        player.setFlying(true);
         player.addPotionEffect(PotionEffectType.SPEED.createEffect(999999999, 3));
         player.addPotionEffect(PotionEffectType.INVISIBILITY.createEffect(99999999, 3));
     }
@@ -288,6 +325,7 @@ public class Arena {
         player.setAllowFlight(false);
         player.getInventory().clear();
         player.setGameMode(GameMode.SURVIVAL);
+        for (Player player2 : Bukkit.getOnlinePlayers()) {player2.showPlayer(plugin, player);}
         for (PotionEffect effect : player.getActivePotionEffects()) {
             player.removePotionEffect(effect.getType());
         }
@@ -296,6 +334,13 @@ public class Arena {
     //LOCATION MANAGER
     public Location getWaitingSpawn(){
         return waitingSpawn;
+    }
+
+    public static void deleteUHCWorld(){
+        World world = Bukkit.getWorld("Vanilla");
+        if(world != null){
+            FileUtil.delete(world.getWorldFolder());
+        }
     }
 
 }
